@@ -1,0 +1,50 @@
+create table usuarios(
+codigo int primary key auto_increment,
+nome char(80) not null,
+idade int not null
+);
+
+insert into usuarios
+(codigo, nome, idade)
+values
+(null, 'Juquinha da Silva', 18),
+(null, 'Pebinha Menor', 17),
+(null, 'Ana', 18),
+(null, 'Ana Maria', 20),
+(null, 'Felipe', 20),
+(null, 'Victor', 23),
+(null, 'Victor Gabriel', 24),
+(null, 'Vinicius', 19),
+(null, 'Marcos', 37),
+(null, 'Matheus', 23),
+(null, 'Bianca', 26),
+(null, 'Maria Eduarda', 21),
+(null, 'Rafael', 19),
+(null, 'Gabriel', 27);
+
+select * from usuarios;
+
+select sum(idade) from usuarios; /*PARA SOMAR AS IDADES DA TABELA*/ 
+
+select count(idade) from usuarios; /*PARA SELECIONAR A QUANTIDADE DE REGISTROS DA COLUNA IDADE NA TABELA USUARIOS*/
+
+select sum(idade)/count(idade) from usuarios; /*PARA CALCULAR A MÉDIA DAS IDADES, SOMA DAS IDADES / QUANTIDADE DE IDADES*/
+
+select avg(idade) from usuarios; /*PARA CALCULAR A MÉDIA TAMBÉM*/
+
+select max(idade) from usuarios; /* PARA SELECIONAR A MAIOR IDADE PRESENTE NA TABELA*/
+
+select min(idade) from usuarios; /* PARA SELECIONAR A MENOR IDADE PRESENTE NA TABELA*/
+
+select nome, idade from usuarios
+where 
+nome = 'Ana';
+
+select nome, idade from usuarios /*PARA SELECIONAR AS IDADES ENTRE 17 E 20 NA TABELA*/
+where
+idade >= 17 and idade <= 20
+order by(nome) asc;
+
+select nome from usuarios /* PARA SELECIONAR AS PESSOAS COM A PRIMEIRA LETRA A*/
+where 
+nome like('a%');
