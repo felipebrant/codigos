@@ -1,0 +1,63 @@
+create TABLE Estudantes(
+nome VARCHAR(255),
+email VARCHAR(255),
+telefone VARCHAR(255),
+altura DECIMAL(3,2),
+aprovado TINYINT(1)
+)
+
+insert into Estudantes (nome, email, telefone, altura, aprovado)
+			values ('João Paulo', 'jpapim@gmail.com', '3345-0909', 1.68, 1);
+insert into Estudantes (nome, email, telefone, altura, aprovado)
+			values ('José Paulo', 'jose@gmail.com', '3345-5555', 1.88, 0);
+insert into Estudantes (nome, email, telefone, altura, aprovado)
+			values ('Maria', 'maria@gmail.com', '3345-8888', 1.98, 1);
+insert into Estudantes (nome, email, telefone, altura, aprovado)
+			values ('Joana', 'joana@gmail.com', '3345-6666', 1.48, 0);
+insert into Estudantes (nome, email, telefone, altura, aprovado)
+			values ('Josefina', 'josefina@gmail.com', '3345-8765', 1.58, 0);
+
+select * from Estudantes;
+
+SELECT AVG(altura) from Estudantes where aprovado = 0; 
+
+SELECT AVG(altura) as 'Media das Alturas' from Estudantes where aprovado = 0; 
+
+select COUNT(altura) from Estudantes where altura >= 1.70;
+
+create table if not exists Aluno (
+	id integer not null,
+	nome varchar(100) not null,
+	email varchar(100) not null,
+	dataNascimento datetime, 
+	primary key (id)
+)
+
+select * from Aluno;
+
+create table if not exists Turma (
+	id integer not null,
+	inicio datetime,
+	fim datetime,
+	observacoes longtext,
+	primary key (id)
+)
+
+select * from Turma;
+
+create table if not exists AlunoTurma (
+	aluno_id integer not null,
+	turma_id integer not null,
+	primary key(aluno_id, turma_id),
+	foreign key(aluno_id) references Aluno(id),
+	foreign key(turma_id) references Turma(id)
+)
+
+select * from AlunoTurma;
+
+insert into Aluno values (1,'João Paulo', 'jpapim@gmail.com', '1978-02-19');
+insert into Aluno values (2,'José Paulo Pimentel', 'jose@gmail.com', '1988-07-12');
+insert into Aluno values (3,'Anibal da Silva', 'anibal@gmail.com', '1968-12-14');
+insert into Aluno values (4,'Maria da Silva', 'maria@gmail.com', '1978-09-09');
+
+select * from Aluno;
