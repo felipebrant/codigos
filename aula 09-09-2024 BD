@@ -42,3 +42,52 @@ end
 /* Comandos para selecionar a variável automatizada que criei / OBS: CALL = Executar*/
 call selecionar_sexo (null);
 call selecionar_sexo ('M');
+
+----------------------------------------------------------------------------------------------------------------------
+/* PARTE 2 DA AULA 09/09/2024 */
+create table pais(
+id_pais INT not null auto_increment,
+nome_pais VARCHAR(200) not null,
+primary key(id_pais)
+);
+
+insert into pais values (null, "Brasil");
+insert into pais values (null, "Chile");
+
+
+create procedure 'Listar_paises' (in id int)
+begin 
+	if(id is null) then
+	select * from pais;
+	else
+	select * from pais where id_pais = id;
+	end if;
+end
+
+
+call Listar_paises(null);
+call Listar_paises(2);
+
+/* EXERCICIO 1:
+ * 
+ * Criar uma procedure (Verificar_Quantidade_Pais) para retornar a quantidade de países
+ * cadastrados na tabela pais do nosso exemplo.
+ * 
+ * Atribuir  para a variável total ao executar a chamada da Procedure.
+ * Incluir mais um país na nossa tabela: ARGENTINA
+ * 
+ * EXERCICIO 2:
+ * 
+ * Criar uma procedure (Selecionar_Paises) para fazer um select na tabela pais,
+ *  limitando a quantidade de registros pela quantidade recebida como parâmetro.
+ * 
+ * Antes inserem mais alguns países em nossa tabela.
+ * Inserir os países BOLÍVIA e URUGUAI.
+ * 
+ * EXERCICIO 3:
+ * 
+ * Criar uma procedure (Selecionar_Paises_Iniciando_Com) para fazer um select na tabela pais,
+ * retornando os registros de acordo com a letra recebida como parâmetro
+ * (Dica: comando CONCAT é para concatenar).
+ */
+
