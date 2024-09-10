@@ -1,0 +1,44 @@
+/* TAREFA:
+ * 
+ * Tem-se um cadastro de clientes (código, nome e sexo) e precisa-se de uma query que liste na tela
+ *  o(s) cliente(s) de sexo feminino, masculino ou ambos, conforme passagem de prametros:
+ * 
+ * - Inserir pelo menos 10 registros na tabela.
+ * - Utilizar Stored Procedure para realizar a execução da query.
+ * 
+ */
+
+/* Criando a tabela Clientes para o funcionamento do exercicio */
+create table Clientes(
+codigo int primary key auto_increment,
+nome varchar(100),
+sexo varchar(100)
+);
+
+/* Inserindo os dados necessários na tabela */
+insert into Clientes (codigo, nome, sexo)
+values
+(null, 'Felipe', 'M'),
+(null, 'Vinicius', 'M'),
+(null, 'Marcos', 'M'),
+(null, 'Rafael', 'M'),
+(null, 'João', 'M'),
+(null, 'Ana', 'F'),
+(null, 'Rebeca', 'F'),
+(null, 'Julia', 'F'),
+(null, 'Bianca', 'F'),
+(null, 'Beatriz', 'F');
+
+/* Criando o procedimento para automatizar a busca */
+create procedure selecionar_sexo (in variavel char(1))
+begin
+	 if (variavel is null) then
+	 select * from Clientes;
+	else
+	select * from Clientes where sexo = variavel;
+end if;
+end
+
+/* Comandos para selecionar a variável automatizada que criei / OBS: CALL = Executar*/
+call selecionar_sexo (null);
+call selecionar_sexo ('M');
