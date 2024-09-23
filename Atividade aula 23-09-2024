@@ -1,0 +1,126 @@
+1. Criação do Banco de Dados e Tabelas
+sql
+Copiar código
+CREATE DATABASE LocacaoVeiculos;
+USE LocacaoVeiculos;
+
+CREATE TABLE Veiculos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    modelo VARCHAR(50),
+    placa VARCHAR(10),
+    disponivel BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE Locacoes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    veiculo_id INT,
+    data_locacao DATE,
+    data_devolucao DATE,
+    FOREIGN KEY (veiculo_id) REFERENCES Veiculos(id)
+);
+2. Inserção de Registros Iniciais
+sql
+Copiar código
+INSERT INTO Veiculos (modelo, placa, disponivel) VALUES 
+('Fiat Uno', 'ABC-1234', TRUE),
+('Chevrolet Onix', 'XYZ-5678', TRUE);
+3. Criação das Triggers
+Trigger para atualizar a disponibilidade ao locar:
+
+sql
+Copiar código
+DELIMITER //
+
+CREATE TRIGGER after_locacao_insert
+AFTER INSERT ON Locacoes
+FOR EACH ROW
+BEGIN
+    UPDATE Veiculos 
+    SET disponivel = FALSE 
+    WHERE id = NEW.veiculo_id;
+END; //
+
+DELIMITER ;
+Trigger para atualizar a disponibilidade ao devolver:
+
+sql
+Copiar código
+DELIMITER //
+
+CREATE TRIGGER after_locacao_update
+AFTER UPDATE ON Locacoes
+FOR EACH ROW
+BEGIN
+    IF NEW.data_devolucao IS NOT NULL THEN
+        UPDATE Veiculos 
+        SET disponivel = TRUE 
+        WHERE id = NEW.veiculo_id;
+    END IF;
+END; //
+
+DELIMITER ;
+4. Criação da Procedure para exibir veículos disponíveis
+sql
+Copiar código
+DELIMITER //
+
+CREATE PROCEDURE listar_veiculos_disponiveis()
+BEGIN
+    SELECT * FROM Veiculos WHERE disponivel = TRUE;
+END; //
+
+DELIMITER ;
+5. Testando a Trigger e Procedure
+Para testar, você pode inserir uma locação e chamar a procedure:
+
+sql
+Copiar código
+INSERT INTO Locacoes (veiculo_id, data_locacao) VALUES (1, '2024-09-23');
+
+CALL listar_veiculos_disponiveis();  -- Exibirá os veículos disponíveis
+Depois, você pode atualizar a data de devolução para testar a trigger de devolução:
+
+sql
+Copiar código
+UPDATE Locacoes SET data_devolucao = '2024-09-30' WHERE id = 1;
+
+CALL listar_veiculos_disponiveis();  -- Deve refletir a disponibilidade atualizada
+Com isso, você tem a estrutura básica para o sistema de locação de veículos! Se precisar de mais detalhes ou ajustes, é só avisar.
+
+
+feitos:
+
+/* criação do banco */
+
+create database locacaoVeiculos;
+
+use database locacaoveiculos;
+
+/* criação das tabelas */
+
+create table Veiculos(
+id int primary key auto_increment,
+modelo varchar(50),
+placa varchar(10),
+disponivel boolean 
+);
+
+create table Locacoes (
+    id int primary key auto_increment,
+    veiculo_id int,
+    data_locacao date,
+    data_devolucao date,
+    foreign key (veiculo_id) references Veiculos(id)
+);
+
+/* inserindo os registros da tabela Veículos*/
+
+insert into Veiculos (modelo, placa, disponivel) values 
+('Fiat Argo', 'AAA-0000', true),
+('Ford Fusion', 'BBB-1111', true),
+('Nissan Versa', 'CCC-2222', true),
+('VW Jetta', 'DDD-3333', true),
+('Ford Focus', 'EEE-4444', true);
+
+
+/* Criação das triggers */
