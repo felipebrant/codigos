@@ -90,37 +90,83 @@ Com isso, você tem a estrutura básica para o sistema de locação de veículos
 
 feitos:
 
-/* criação do banco */
-
-create database locacaoVeiculos;
-
-use database locacaoveiculos;
+use locacaoveiculos;
 
 /* criação das tabelas */
-
-create table Veiculos(
-id int primary key auto_increment,
-modelo varchar(50),
-placa varchar(10),
-disponivel boolean 
+create table veiculos (
+    id int primary key auto_increment,
+    modelo varchar(50),
+    placa varchar(10),
+    disponivel boolean 
 );
 
-create table Locacoes (
+create table locacoes (
     id int primary key auto_increment,
     veiculo_id int,
     data_locacao date,
     data_devolucao date,
-    foreign key (veiculo_id) references Veiculos(id)
+    foreign key (veiculo_id) references veiculos(id)
 );
 
-/* inserindo os registros da tabela Veículos*/
+/* inserindo os registros da tabela veículos */
+insert into veiculos (modelo, placa, disponivel) values 
+('fiat argo', 'aaa-0000', true),
+('ford fusion', 'bbb-1111', true),
+('nissan versa', 'ccc-2222', true),
+('vw jetta', 'ddd-3333', true),
+('ford focus', 'eee-4444', true);
 
-insert into Veiculos (modelo, placa, disponivel) values 
-('Fiat Argo', 'AAA-0000', true),
-('Ford Fusion', 'BBB-1111', true),
-('Nissan Versa', 'CCC-2222', true),
-('VW Jetta', 'DDD-3333', true),
-('Ford Focus', 'EEE-4444', true);
+/* criação das triggers */
 
+/* trigger de disponibilidade para locação */
+delimiter $$
 
-/* Criação das triggers */
+create trigger after_locacao_insert
+after insert on locacoes
+for each row
+begin 
+    update veiculos
+    set disponivel = false
+    where id = new.veiculo_id;
+end; $$
+
+delimiter ;
+
+/* trigger de atualização ao devolver locação */
+delimiter $$
+
+create trigger after_locacao_update
+after update on locacoes
+for each row 
+begin 
+    if new.data_devolucao is not null then
+        update veiculos
+        set disponivel = true 
+        where id = new.veiculo_id;
+    end if;
+end; $$
+
+delimiter ;
+
+/* criação do procedimento */
+
+delimiter $$
+
+create procedure listar_veiculos_disponiveis()
+begin
+    select * from veiculos where disponivel = true;
+end; $$
+
+delimiter ;
+
+/* teste adicionando uma locação */
+insert into locacoes (veiculo_id, data_locacao) values
+(1, '2024-09-23');
+
+/* para exibir os veículos disponíveis */
+call listar_veiculos_disponiveis();
+
+/* teste da data de devolução do procedimento */
+update locacoes set data_devolucao = '2024-10-03' where id = 1;
+
+call listar_veiculos_disponiveis();
